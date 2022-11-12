@@ -23,3 +23,25 @@ class MultiHeadCrossEntropyLoss(nn.Module):
         for i in range(self.num_head):
             loss = self.loss_fn[i](predict[i], target[i])
             result += loss*self.weight_per_loss[i]
+        
+        return result
+
+if __name__ == '__main__':
+    loss = MultiHeadCrossEntropyLoss(3)
+    a = [torch.zeros(1,20, dtype=torch.float32), torch.zeros(1,20, dtype=torch.float32), torch.zeros(1,10, dtype=torch.float32)]
+    b = [torch.tensor([0]),
+        torch.tensor([0]),
+        torch.tensor([0])]
+
+    losses = loss(a,b)
+
+    print(losses.item())
+
+    a = [torch.zeros(1,5, dtype=torch.float32), torch.zeros(1,5, dtype=torch.float32), torch.zeros(1,5, dtype=torch.float32)]
+    b = [torch.tensor([0]),
+        torch.tensor([0]),
+        torch.tensor([0])]
+
+    losses = loss(a,b)
+
+    print(losses.item())
