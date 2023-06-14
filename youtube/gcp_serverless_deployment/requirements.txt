@@ -1,0 +1,4 @@
+fastapi==0.97.0
+Requests==2.31.0
+transformers==4.15.0
+uvicorn[standard]
