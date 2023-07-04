@@ -4,6 +4,10 @@ import numpy as np
 from openvino.inference_engine import IECore
 import os
 from cvzone.FaceDetectionModule import FaceDetector
+import pyvectordb
+
+client = pyvectordb.VectorDBClient("localhost", 3737)
+client.auth('root', 'root')
 
 
 model_xml = 'public/face-recognition-resnet100-arcface-onnx/FP16/face-recognition-resnet100-arcface-onnx.xml'
@@ -69,6 +73,20 @@ def get_embeddings(img):
 
 def compare_embeddings(emb1, emb2, threshold=0.5):
     similarity = cosine_similarity(emb1, emb2)
+    if similarity > threshold:
+        return True, similarity
+    else:
+        return False, similarity
+    
+def register_face(emb, name):
+    client.create(name, emb.reshape[-1])
+
+def recognize_face_one_to_many(emb, threshold=0.6):
+    return client.search(emb.reshape[-1], threshold, 1)
+
+def recognize_face_one_to_one(emb1, name, threshold=0.6):
+    emb2 = client.read(name)
+    similarity = cosine_similarity(emb1, np.array(emb2))
     if similarity > threshold:
         return True, similarity
     else:
