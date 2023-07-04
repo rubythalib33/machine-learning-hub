@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 import os
-from engine import load_image, get_embeddings, compare_embeddings, register_face, recognize_face_one_to_many, recognize_face_one_to_one
+from engine import load_image, get_embeddings, compare_embeddings
 
 app = FastAPI()
 
@@ -39,71 +39,71 @@ async def compare_two_faces(face1: UploadFile = File(...), face2: UploadFile = F
         return {"error": str(e)}
     
 
-@app.post("/register-face")
-async def register_face(name: str, face: UploadFile = File(...)):
-    try:
-        # Save uploaded files to disk
-        face_path = "face.jpg"
-        with open(face_path, "wb") as f:
-            f.write(await face.read())
+# @app.post("/register-face")
+# async def register_face(name: str, face: UploadFile = File(...)):
+#     try:
+#         # Save uploaded files to disk
+#         face_path = "face.jpg"
+#         with open(face_path, "wb") as f:
+#             f.write(await face.read())
 
-        # Load and preprocess images
-        img = load_image(face_path)
+#         # Load and preprocess images
+#         img = load_image(face_path)
 
-        # Get embeddings
-        emb = get_embeddings(img)
+#         # Get embeddings
+#         emb = get_embeddings(img)
 
-        # Register face
-        register_face(emb, name)
+#         # Register face
+#         register_face(emb, name)
 
-        # Remove temporary image files
-        os.remove(face_path)
+#         # Remove temporary image files
+#         os.remove(face_path)
 
-        return {"status": "success"}
+#         return {"status": "success"}
 
-    except Exception as e:
-        return {"error": str(e)}
+#     except Exception as e:
+#         return {"error": str(e)}
     
 
-@app.post("/recognize-face-one-to-many")
-async def recognize_face_one_to_many_api(face: UploadFile = File(...)):
-    # Save uploaded files to disk
-    face_path = "face.jpg"
-    with open(face_path, "wb") as f:
-        f.write(await face.read())
+# @app.post("/recognize-face-one-to-many")
+# async def recognize_face_one_to_many_api(face: UploadFile = File(...)):
+#     # Save uploaded files to disk
+#     face_path = "face.jpg"
+#     with open(face_path, "wb") as f:
+#         f.write(await face.read())
 
-    # Load and preprocess images
-    img = load_image(face_path)
+#     # Load and preprocess images
+#     img = load_image(face_path)
 
-    # Get embeddings
-    emb = get_embeddings(img)
+#     # Get embeddings
+#     emb = get_embeddings(img)
 
-    # Recognize face
-    result = recognize_face_one_to_many(emb)
+#     # Recognize face
+#     result = recognize_face_one_to_many(emb)
 
-    # Remove temporary image files
-    os.remove(face_path)
+#     # Remove temporary image files
+#     os.remove(face_path)
 
-    return {"result": result}
+#     return {"result": result}
 
     
-@app.post("/recognize-face-one-to-one")
-async def recognize_face_one_to_one_api(name: str, face: UploadFile = File(...)):
-    # Save uploaded files to disk
-    face_path = "face.jpg"
-    with open(face_path, "wb") as f:
-        f.write(await face.read())
+# @app.post("/recognize-face-one-to-one")
+# async def recognize_face_one_to_one_api(name: str, face: UploadFile = File(...)):
+#     # Save uploaded files to disk
+#     face_path = "face.jpg"
+#     with open(face_path, "wb") as f:
+#         f.write(await face.read())
 
-    # Load and preprocess images
-    img = load_image(face_path)
+#     # Load and preprocess images
+#     img = load_image(face_path)
 
-    # Get embeddings
-    emb = get_embeddings(img)
+#     # Get embeddings
+#     emb = get_embeddings(img)
 
-    # Recognize face
-    result, similarity = recognize_face_one_to_one(emb, name)
+#     # Recognize face
+#     result, similarity = recognize_face_one_to_one(emb, name)
 
-    # Remove temporary image files
-    os.remove(face_path)
+#     # Remove temporary image files
+#     os.remove(face_path)
 
-    return {"result": result, "similarity": similarity}
+#     return {"result": result, "similarity": similarity}
