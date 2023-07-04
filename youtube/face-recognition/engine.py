@@ -79,14 +79,18 @@ def compare_embeddings(emb1, emb2, threshold=0.5):
         return False, similarity
     
 def register_face(emb, name):
-    client.create(name, emb.reshape[-1])
+    client.create(name, emb.reshape(-1).tolist())
 
 def recognize_face_one_to_many(emb, threshold=0.6):
-    return client.search(emb.reshape[-1], threshold, 1)
+    return client.search(emb.reshape(-1).tolist(), threshold, 1)
 
 def recognize_face_one_to_one(emb1, name, threshold=0.6):
     emb2 = client.read(name)
-    similarity = cosine_similarity(emb1, np.array(emb2))
+    if emb2 is None:
+        return False, 0
+    
+    similarity = cosine_similarity(emb1.reshape(-1), np.array(emb2))
+    print(similarity)
     if similarity > threshold:
         return True, similarity
     else:
